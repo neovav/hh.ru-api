@@ -1,5 +1,18 @@
 {
+    "name": "neovav/hh.ru-api",
+    "type": "project",
+    "description": "Api hh.ru",
+    "keywords": [
+        "api",
+        "hh.ru"
+    ],
+    "license": "Apache-2.0",
     "require": {
         "guzzlehttp/guzzle": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "HHruApi\\": "src/"
+        }
     }
 }
