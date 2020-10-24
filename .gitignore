@@ -1,4 +1,5 @@
-.env
-composer.lock
 .idea
 vendor
+.env
+tests/.env
+composer.lock
