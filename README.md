@@ -4,7 +4,7 @@ This is library for access to hh.ru Api
 
 Tests:
 
-1. Copy file: tests/.env-sample to tests/.env
+1. Copy file: tests/.env-sample to tests/.env and change values
 2. Build docker container:
 
 ```bash
