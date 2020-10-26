@@ -10,6 +10,8 @@ class Vacancies
 
     const QUERY_SEARCH = '/vacancies';
 
+    const QUERY_PUBLIC = '/vacancies';
+
     const QUERY_ACTIVE = '/employers';
 
     /**
@@ -100,7 +102,7 @@ class Vacancies
      */
     public function publicToSite(VacanciesForPublc $form)
     {
-        $url = 'https://'.Api::HOST_API.self::QUERY_SEARCH.'?__time='.time();
+        $url = 'https://'.Api::HOST_API.self::QUERY_PUBLIC;
 
         $body = Utils::convertClassToJson($form);
 
