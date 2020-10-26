@@ -19,6 +19,10 @@ class Api
 
     private $negotiations;
 
+    public $managerId;
+
+    public $employerId;
+
     const HOST_API = 'api.hh.ru';
 
     public function __construct(OAuthCredentials &$credentials, Client &$client = null)
