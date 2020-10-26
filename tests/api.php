@@ -5,9 +5,14 @@ mb_internal_encoding("UTF-8");
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env');
+$envFile = __DIR__ . '/.env';
 
-$env = $dotenv->load();
+$env = getenv();
+
+if (file_exists($envFile) && is_readable($envFile)) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env');
+    $env = array_merge($dotenv->load(), $env);
+}
 
 $creditials = new \HHruApi\OAuthCredentials();
 
