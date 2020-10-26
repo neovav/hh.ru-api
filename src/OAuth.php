@@ -10,41 +10,22 @@ class OAuth implements OAuthInterface
 {
     private static $isDebug = false;
 
-    private $clientId;
-
-    private $clientSecret;
-
-    private $accessToken;
-
-    private $authCode;
-
-    private $refreshToken;
-
-    private $expairesIn;
+    private $credentials;
 
     private $client;
-
-    private $redirectUri;
 
     const URL_GET_TOKEN = 'https://hh.ru/oauth/token';
 
     /**
      * Constructor of the OAuth class
      *
-     * To get $authCode go to the following link in your browser: https://hh.ru/oauth/authorize?response_type=code&client_id={client_id}&state={state}&redirect_uri={redirect_uri}
-     *
-     * @param string $clientId
-     * @param string $clientSecret
-     * @param string $authCode
-     * @param string $redirectUri
+     * @param OAuthCredentials $credentials
+     * @param Client $client
      */
-    public function __construct($clientId, $clientSecret, $authCode = null, $redirectUri = null)
+    public function __construct(OAuthCredentials &$credentials, Client $client = null)
     {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->authCode = $authCode;
-        $this->redirectUri = $redirectUri;
-        $this->client = new Client();
+        $this->credentials = &$credentials;
+        $this->client = ($client instanceof Client) ? $client : new Client();
     }
 
     /**
@@ -58,23 +39,13 @@ class OAuth implements OAuthInterface
     }
 
     /**
-     * Getting refresh code
+     * Getting credentials for portals hh.ru
      *
-     * @return string
+     * @return OAuthCredentials
      */
-    public function getRefreshToken()
+    public function getCredentials()
     {
-        return $this->refreshToken;
-    }
-
-    /**
-     * Getting expaires in
-     *
-     * @return int
-     */
-    public function getExpairesIn()
-    {
-        return $this->expairesIn;
+        return $this->credentials;
     }
 
     /**
@@ -86,18 +57,40 @@ class OAuth implements OAuthInterface
      */
     private function getAccessToken()
     {
-        $post = array(
-            'grant_type' => 'authorization_code',
-            'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret,
-            'code' => $this->authCode,
-        );
-
-        if (!empty($this->redirectUri)) {
-            $post['redirect_uri'] = $this->redirectUri;
+        if (empty($this->credentials->clientId)) {
+            throw new \Exception('Client id is absent');
         }
 
-        return $this->requestToken($post);
+        if (empty($this->credentials->clientSecret)) {
+            throw new \Exception('Client secret is absent');
+        }
+
+        if (empty($this->credentials->authCode)) {
+            throw new \Exception('Auth code is absent');
+        }
+
+        $post = array(
+            'grant_type' => 'authorization_code',
+            'client_id' => $this->credentials->clientId,
+            'client_secret' => $this->credentials->clientSecret,
+            'code' => $this->credentials->authCode,
+        );
+
+        if (!empty($this->credentials->redirectUri)) {
+            $post['redirect_uri'] = $this->credentials->redirectUri;
+        }
+
+        try {
+            $result = $this->requestToken($post);
+        } catch (\Exception $e) {
+            throw new \Exception('Error request get access token (' . $e->getCode() . '): ' . $e->getMessage());
+        }
+
+        if (empty($data['access_token'])) {
+            throw new \Exception('Error request get access toke. Access token is absent');
+        }
+
+        return $result;
     }
 
     /**
@@ -109,12 +102,26 @@ class OAuth implements OAuthInterface
      */
     private function updAccessToken()
     {
+        if (empty($this->credentials->refreshToken)) {
+            throw new \Exception('Refresh token is absent');
+        }
+
         $post = array(
             'grant_type' => 'refresh_token',
-            'refresh_token' => $this->refreshToken
+            'refresh_token' => $this->credentials->refreshToken
         );
 
-        return $this->requestToken($post);
+        try {
+            $result = $this->requestToken($post);
+        } catch (\Exception $e) {
+            throw new \Exception('Error request update access token (' . $e->getCode() . '): ' . $e->getMessage());
+        }
+
+        if (empty($data['access_token'])) {
+            throw new \Exception('Error request update access token. Access token is absent');
+        }
+
+        return $result;
     }
 
     /**
@@ -127,8 +134,10 @@ class OAuth implements OAuthInterface
     public function requestToken(array $post)
     {
         $options = array(
-            'form_params' => http_build_query($post),
-            'debug' => self::$isDebug
+            'body' => http_build_query($post),
+            'headers' => array(
+                'Content-type' => 'application/x-www-form-urlencoded'
+            )
         );
 
         $result = $this->client->post(self::URL_GET_TOKEN, $options);
@@ -146,15 +155,15 @@ class OAuth implements OAuthInterface
         }
 
         if (!empty($data['access_token'])) {
-            $this->accessToken = $data['access_token'];
+            $this->credentials->accessToken = $data['access_token'];
         }
 
         if (!empty($data['refresh_token'])) {
-            $this->refreshToken = $data['refresh_token'];
+            $this->credentials->refreshToken = $data['refresh_token'];
         }
 
         if (!empty($data['expires_in'])) {
-            $this->expairesIn = time() + (int) $data['expires_in'];
+            $this->credentials->expairesIn = time() + (int) $data['expires_in'];
         }
 
         if (!empty($data['error'])) {
@@ -179,20 +188,28 @@ class OAuth implements OAuthInterface
         $result = null;
 
         if (empty($refreshToken)) {
-            if (empty($this->authCode)) {
+            $refreshToken = $this->credentials->refreshToken;
+        }
+
+        if (empty($expairesIn)) {
+            $expairesIn = $this->credentials->expairesIn;
+        }
+
+        if (empty($refreshToken)) {
+            if (empty($this->credentials->authCode)) {
                 throw new \Exception('Empty auth code');
             }
 
             $this->getAccessToken();
         } else {
-            if (empty($expairesIn) && empty($this->expairesIn)
-                || empty($this->accessToken)
-                || (!empty($expairesIn) && time() > $expairesIn)
-                || (!empty($this->expairesIn) && time() > $this->expairesIn)) {
+            if (empty($expairesIn)
+                || time() > $expairesIn
+                || empty($this->credentials->accessToken)
+            ) {
                 $this->updAccessToken();
             }
         }
 
-        return $this->accessToken;
+        return $this->credentials->accessToken;
     }
 }
