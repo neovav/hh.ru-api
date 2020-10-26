@@ -1,7 +1,11 @@
 {
     "name": "neovav/hh.ru-api",
-    "type": "package",
-    "minimum-stability": "dev",
+    "type": "library",
+    "support": {
+      "issues": "https://github.com/neovav/hh.ru-api/issues",
+      "source": "https://github.com/neovav/hh.ru-api"
+    },
+    "minimum-stability": "beta",
     "description": "Api hh.ru",
     "keywords": [
         "api",
