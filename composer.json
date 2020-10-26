@@ -1,6 +1,7 @@
 {
     "name": "neovav/hh.ru-api",
     "type": "package",
+    "minimum-stability": "dev",
     "description": "Api hh.ru",
     "keywords": [
         "api",
