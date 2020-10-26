@@ -1,6 +1,6 @@
 {
     "name": "neovav/hh.ru-api",
-    "type": "project",
+    "type": "package",
     "description": "Api hh.ru",
     "keywords": [
         "api",
@@ -13,6 +13,13 @@
         "vlucas/phpdotenv": "^5.2",
         "ext-json": "*"
     },
+    "authors": [
+      {
+        "name": "Verveda Aleksandr",
+        "email": "neovav@ukr.net",
+        "role": "Developer"
+      }
+  ],
     "autoload": {
         "psr-4": {
             "HHruApi\\": "src/"
