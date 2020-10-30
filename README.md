@@ -24,11 +24,17 @@ docker build -t hh.ru-api .
     ```bash
     docker run --env-file tests/.env hh.ru-api php -f tests/vacancies.php
     ```
+
+    b. For testing personal: 
+    
+    ```bash
+    docker run --env-file tests/.env hh.ru-api php -f tests/personal.php
+    ```
    
 Using in your projects:
 
 1. Install package using composer:
 
 ```bash
-composer require neovav/hh.ru-api:1.0.1
+composer require neovav/hh.ru-api:1.0.2
 ```
