@@ -9,19 +9,21 @@ use Psr\Http\Message\ResponseInterface;
  */
 class Api
 {
-    private $client;
+    private Client $client;
 
-    private $oauth;
+    private OAuth $oauth;
 
-    private $vacancies;
+    private ?Vacancies $vacancies = null;
 
-    private $resumes;
+    private ?Resumes $resumes = null;
 
-    private $negotiations;
+    private ?Negotiations $negotiations = null;
 
-    public $managerId;
+    private ?Personal $personal = null;
 
-    public $employerId;
+    public int $managerId;
+
+    public int $employerId;
 
     const HOST_API = 'api.hh.ru';
 
@@ -39,7 +41,7 @@ class Api
      *
      * @return Client
      */
-    public function getClient()
+    public function getClient(): Client
     {
         return $this->client;
     }
@@ -49,7 +51,7 @@ class Api
      *
      * @return OAuth
      */
-    public function getOAuth()
+    public function getOAuth(): OAuth
     {
         return $this->oauth;
     }
@@ -59,7 +61,7 @@ class Api
      *
      * @return Vacancies
      */
-    public function getVacancies()
+    public function getVacancies(): Vacancies
     {
         if (!($this->vacancies instanceof Vacancies)) {
             $this->vacancies = new Vacancies($this);
@@ -72,7 +74,7 @@ class Api
      *
      * @return Resumes
      */
-    public function getResumes()
+    public function getResumes(): Resumes
     {
         if (!($this->resumes instanceof Resumes)) {
             $this->resumes = new Resumes($this);
@@ -85,12 +87,25 @@ class Api
      *
      * @return Negotiations
      */
-    public function getNegotiations()
+    public function getNegotiations(): Negotiations
     {
         if (!($this->negotiations instanceof Negotiations)) {
             $this->negotiations = new Negotiations($this);
         }
         return $this->negotiations;
+    }
+
+    /**
+     * Return class Negotiations
+     *
+     * @return Personal
+     */
+    public function getPersonal(): Personal
+    {
+        if (!($this->personal instanceof Personal)) {
+            $this->personal = new Personal($this);
+        }
+        return $this->personal;
     }
 
     /**
@@ -105,23 +120,17 @@ class Api
      *
      * @throws
      */
-    public function request($url, array $headers = array(), $method = 'GET', $body = null)
+    public function request(string $url, array $headers = [], string $method = 'GET', string $body = null): ResponseInterface
     {
         $token = $this->oauth->getToken();
 
         $headers['Authorization'] = "Bearer $token";
 
-        $options = array(
-            'headers' => $headers
-        );
+        $options = ['headers' => $headers];
 
-        if (in_array($method , array('POST', 'PUT'))) {
+        if (in_array($method , ['POST', 'PUT'])) {
             $options['body'] = $body;
         }
-
-        var_dump($url);
-        var_dump($method);
-        var_dump($options);
 
         return $this->client->request($method, $url, $options);
     }
@@ -137,7 +146,7 @@ class Api
      *
      * @throws
      */
-    public function requestPost($url, $body, array $headers = array())
+    public function requestPost(string $url, string $body, array $headers = []): ResponseInterface
     {
         return $this->request($url, $headers, 'POST', $body);
     }

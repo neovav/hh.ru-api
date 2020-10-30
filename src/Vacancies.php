@@ -6,7 +6,7 @@ namespace HHruApi;
  */
 class Vacancies
 {
-    private $api;
+    private Api $api;
 
     const QUERY_SEARCH = '/vacancies';
 
@@ -33,7 +33,7 @@ class Vacancies
      *
      * @throws
      */
-    public function search(VacanciesQuery $query)
+    public function search(VacanciesQuery $query):array
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_SEARCH;
 
@@ -43,7 +43,7 @@ class Vacancies
             $url .= "?$queryString";
         }
 
-        $headers = array('Content-type' => 'application/x-www-form-urlencoded');
+        $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
         $response = $this->api->request($url, $headers);
 
         $body = $response->getBody()->getContents();
@@ -67,7 +67,7 @@ class Vacancies
      *
      * @throws
      */
-    public function getActive($employerId, VacanciesQueryActive $query = null)
+    public function getActive($employerId, VacanciesQueryActive $query = null): array
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_ACTIVE . "/$employerId/vacancies/active";
 
@@ -77,7 +77,7 @@ class Vacancies
             $url .= "?$queryString";
         }
 
-        $headers = array('Content-type' => 'application/x-www-form-urlencoded');
+        $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
         $response = $this->api->request($url, $headers);
 
         $body = $response->getBody()->getContents();
@@ -100,13 +100,13 @@ class Vacancies
      *
      * @throws
      */
-    public function publicToSite(VacanciesForPublc $form)
+    public function publicToSite(VacanciesForPublc $form): string
     {
         $url = 'https://'.Api::HOST_API.self::QUERY_PUBLIC;
 
         $body = Utils::convertClassToJson($form);
 
-        $headers = array('Content-type' => 'application/json');
+        $headers = ['Content-type' => 'application/json'];
         $response = $this->api->requestPost($url, $body, $headers);
 
         $body = $response->getBody()->getContents();

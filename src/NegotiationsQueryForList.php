@@ -6,11 +6,11 @@ namespace HHruApi;
  */
 class NegotiationsQueryForList
 {
-    public $page;
-    public $per_page;
-    public $order_by;
-    public $order = 'asc';
-    public $vacancy_id;
-    public $status;
-    public $has_updates = false;
+    public int $page = 0;
+    public int $per_page = 100;
+    public string $order_by;
+    public string $order = 'asc';
+    public int $vacancy_id;
+    public string $status;
+    public bool $has_updates = false;
 }

@@ -9,5 +9,5 @@ interface OAuthInterface
     /**
      * @return string
      */
-    public function getToken();
+    public function getToken(): string;
 }

@@ -8,7 +8,7 @@ namespace HHruApi;
  */
 class Negotiations
 {
-    private $api;
+    private Api $api;
 
     const QUERY_LIST = '/negotiations';
 
@@ -31,7 +31,7 @@ class Negotiations
      *
      * @throws
      */
-    public function getList(NegotiationsQueryForList $query)
+    public function getList(NegotiationsQueryForList $query): array
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_LIST;
 
@@ -41,7 +41,7 @@ class Negotiations
             $url .= "?$queryString";
         }
 
-        $headers = array('Content-type' => 'application/x-www-form-urlencoded');
+        $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
         $response = $this->api->request($url, $headers);
 
         $body = $response->getBody()->getContents();

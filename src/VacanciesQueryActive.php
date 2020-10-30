@@ -8,10 +8,10 @@ namespace HHruApi;
  */
 class VacanciesQueryActive
 {
-    public $manager_id;
-    public $text;
-    public $area;
-    public $order_by;
-    public $per_page;
-    public $page;
+    public string $manager_id = '';
+    public string $text = '';
+    public ?int $area = null;
+    public ?string $order_by = null;
+    public int $per_page = 100;
+    public int $page = 1;
 }

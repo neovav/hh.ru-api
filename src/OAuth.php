@@ -8,11 +8,11 @@ use GuzzleHttp\Client;
  */
 class OAuth implements OAuthInterface
 {
-    private static $isDebug = false;
+    private static bool $isDebug = false;
 
-    private $credentials;
+    private OAuthCredentials $credentials;
 
-    private $client;
+    private Client $client;
 
     const URL_GET_TOKEN = 'https://hh.ru/oauth/token';
 
@@ -33,7 +33,7 @@ class OAuth implements OAuthInterface
      *
      * @param bool $isDebug
      */
-    public static function enableDebug($isDebug = true)
+    public static function enableDebug(bool $isDebug = true)
     {
         self::$isDebug = $isDebug;
     }
@@ -43,7 +43,7 @@ class OAuth implements OAuthInterface
      *
      * @return OAuthCredentials
      */
-    public function getCredentials()
+    public function getCredentials(): OAuthCredentials
     {
         return $this->credentials;
     }
@@ -55,7 +55,7 @@ class OAuth implements OAuthInterface
      *
      * @return array
      */
-    private function getAccessToken()
+    private function getAccessToken(): array
     {
         if (empty($this->credentials->clientId)) {
             throw new \Exception('Client id is absent');
@@ -69,12 +69,12 @@ class OAuth implements OAuthInterface
             throw new \Exception('Auth code is absent');
         }
 
-        $post = array(
+        $post = [
             'grant_type' => 'authorization_code',
             'client_id' => $this->credentials->clientId,
             'client_secret' => $this->credentials->clientSecret,
             'code' => $this->credentials->authCode,
-        );
+        ];
 
         if (!empty($this->credentials->redirectUri)) {
             $post['redirect_uri'] = $this->credentials->redirectUri;
@@ -100,16 +100,16 @@ class OAuth implements OAuthInterface
      *
      * @throws
      */
-    private function updAccessToken()
+    private function updAccessToken(): array
     {
         if (empty($this->credentials->refreshToken)) {
             throw new \Exception('Refresh token is absent');
         }
 
-        $post = array(
+        $post = [
             'grant_type' => 'refresh_token',
             'refresh_token' => $this->credentials->refreshToken
-        );
+        ];
 
         try {
             $result = $this->requestToken($post);
@@ -133,12 +133,12 @@ class OAuth implements OAuthInterface
      */
     public function requestToken(array $post)
     {
-        $options = array(
+        $options = [
             'body' => http_build_query($post),
-            'headers' => array(
+            'headers' => [
                 'Content-type' => 'application/x-www-form-urlencoded'
-            )
-        );
+            ]
+        ];
 
         $result = $this->client->post(self::URL_GET_TOKEN, $options);
 
@@ -179,11 +179,11 @@ class OAuth implements OAuthInterface
      * @param string $refreshToken
      * @param int $expairesIn
      *
-     * @return array
+     * @return string
      *
      * @throws
      */
-    public function getToken($refreshToken = null, $expairesIn = null)
+    public function getToken($refreshToken = null, $expairesIn = null): string
     {
         $result = null;
 

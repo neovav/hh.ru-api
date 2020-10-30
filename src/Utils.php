@@ -17,13 +17,13 @@ class Utils
      *
      * @throws
      */
-    public static function convertClassToUriQuery($class)
+    public static function convertClassToUriQuery($class): string
     {
         if (!is_object($class)) {
             throw new \Exception('Parameter is not class');
         }
 
-        $queries = array();
+        $queries = [];
 
         $reflect = new ReflectionClass($class);
 
@@ -61,13 +61,13 @@ class Utils
      *
      * @throws
      */
-    public static function convertClassToJson($class)
+    public static function convertClassToJson($class): string
     {
         if (!is_object($class)) {
             throw new \Exception('Parameter is not class');
         }
 
-        $query = array();
+        $query = [];
 
         $reflect = new ReflectionClass($class);
 

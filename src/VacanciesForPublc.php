@@ -8,46 +8,76 @@ namespace HHruApi;
  */
 class VacanciesForPublc
 {
-    public $name;
-    public $description;
-    public $key_skills;
-    public $specializations;
-    public $area = array('id' => null);
-    public $type = array('id' => null);
-    public $billing_type = array('id' => null);
-    public $site = array('id' => null);
-    public $code;
-    public $department = array('id' => null);
-    public $salary = null;
-    public $address = null;
-    public $experience = array('id' => null);
-    public $schedule = array('id' => null);
-    public $employment = array('id' => null);
-    public $contacts = array(
-        'name' => null,
-        'email' => null,
-        'phones' => array(),
-    );
-    public $test = array(
-        'id' => null,
-        'required' => null
-    );
-    public $response_url = array(
-        'id' => null,
-        'required' => null
-    );
-    public $custom_employer_name = '';
-    public $manager = array('id' => null);
-    public $response_notifications = false;
-    public $allow_messages = false;
-    public $response_letter_required = false;
-    public $accept_handicapped = false;
-    public $accept_kids = false;
-    public $branded_template = array('id' => null);
-    public $driver_license_types = array();
-    public $accept_incomplete_resumes = true;
-    public $working_days = array();
-    public $working_time_intervals = array();
-    public $working_time_modes = array();
-    public $accept_temporary = false;
+    public string $name = '';
+    public string $description = '';
+    /** string key_skills[].name */
+    public array $key_skills = [];
+    /** string specializations[].id */
+    public array $specializations = [];
+    /** string area.id */
+    public ?array $area = null;
+    /** string type.id */
+    public ?array $type = null;
+    /** string billing_type.id */
+    public ?array $billing_type = null;
+    /** string site.id */
+    public ?array $site = null;
+    public string $code = '';
+    /** string department.id */
+    public ?array $department = null;
+    /**
+     * int salary.from
+     * int salary.to
+     * bool salary.gross
+     * bool string.currency
+     */
+    public ?array $salary = null;
+    /**
+     * string address.id
+     * bool address.show_metro_only
+     */
+    public ?array $address = null;
+    /** string experience.id */
+    public ?array $experience = null;
+    /** string schedule.id */
+    public ?array $schedule = null;
+    /** string employment.id */
+    public ?array $employment = null;
+    /**
+     * string contacts.name
+     * string contacts.email
+     * array contacts.phones
+     * string contacts.phones[].country
+     * string contacts.phones[].city
+     * string contacts.phones[].number
+     * string contacts.phones[].comment
+     */
+    public array $contacts = [
+        'name' => '',
+        'email' => '',
+        'phones' => [],
+    ];
+    /**
+     * string test.id
+     * bool test.required
+     */
+    public ?array $test = null;
+    public string $response_url = '';
+    public string $custom_employer_name = '';
+    /** string manager.id */
+    public ?array $manager = null;
+    public bool $response_notifications = false;
+    public bool $allow_messages = false;
+    public bool $response_letter_required = false;
+    public bool $accept_handicapped = false;
+    public bool $accept_kids = false;
+    /** string branded_template.id */
+    public ?array $branded_template = null;
+    /** string driver_license_types[].id */
+    public array $driver_license_types = [];
+    public bool $accept_incomplete_resumes = true;
+    public array $working_days = [];
+    public array $working_time_intervals = [];
+    public array $working_time_modes = [];
+    public bool $accept_temporary = false;
 }

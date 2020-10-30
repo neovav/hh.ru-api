@@ -6,7 +6,7 @@ namespace HHruApi;
  */
 class Resumes
 {
-    private $api;
+    private Api $api;
 
     /**
      * Constructor of the Resumes class

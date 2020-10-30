@@ -9,7 +9,7 @@ try {
     $vacancies = $api->getVacancies();
 
     $query = new \HHruApi\VacanciesQuery();
-    $query->text = 'php';
+    $query->text = ['php'];
     $list = $vacancies->search($query);
 
     echo "\r\n", 'Vacancies list: ', "\r\n";

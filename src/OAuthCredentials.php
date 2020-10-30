@@ -6,18 +6,18 @@ namespace HHruApi;
  */
 class OAuthCredentials
 {
-    public $clientId;
+    public string $clientId;
 
-    public $clientSecret;
+    public string $clientSecret;
 
-    public $accessToken;
+    public string $accessToken;
 
     /** To get $authCode go to the following link in your browser: https://hh.ru/oauth/authorize?response_type=code&client_id={client_id}&state={state}&redirect_uri={redirect_uri} */
-    public $authCode;
+    public string $authCode;
 
-    public $refreshToken;
+    public string $refreshToken;
 
-    public $expairesIn;
+    public int $expairesIn;
 
-    public $redirectUri;
+    public string $redirectUri;
 }
