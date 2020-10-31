@@ -12,6 +12,6 @@ class VacanciesQueryActive
     public string $text = '';
     public ?int $area = null;
     public ?string $order_by = null;
-    public int $per_page = 100;
-    public int $page = 1;
+    public int $per_page = 50;
+    public int $page = 0;
 }

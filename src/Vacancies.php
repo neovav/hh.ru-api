@@ -67,7 +67,7 @@ class Vacancies
      *
      * @throws
      */
-    public function getActive($employerId, VacanciesQueryActive $query = null): array
+    public function getActive(int $employerId, VacanciesQueryActive $query = null): array
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_ACTIVE . "/$employerId/vacancies/active";
 
