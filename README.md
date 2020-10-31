@@ -25,10 +25,16 @@ docker build -t hh.ru-api .
     docker run --env-file tests/.env hh.ru-api php -f tests/vacancies.php
     ```
 
-    b. For testing personal: 
+    c. For testing personal: 
     
     ```bash
     docker run --env-file tests/.env hh.ru-api php -f tests/personal.php
+    ```
+
+    d. For testing active vacancies: 
+    
+    ```bash
+    docker run --env-file tests/.env hh.ru-api php -f tests/vacancies_active.php
     ```
    
 Using in your projects:
