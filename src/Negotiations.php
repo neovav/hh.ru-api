@@ -10,7 +10,11 @@ class Negotiations
 {
     private Api $api;
 
-    const QUERY_LIST = '/negotiations';
+    const QUERY_LIST = '/negotiations/response';
+
+    const QUERY_INTERVIEW = '/negotiations/invited.';
+
+    const QUERY_INVITE_AFTER_RESPONSE = '/message_templates/invite_after_response';
 
     /**
      * Constructor of the Resumes class
@@ -53,5 +57,61 @@ class Negotiations
         }
 
         return $data;
+    }
+
+    /**
+     * Send invite on interview
+     *
+     * @param int $responseId
+     * @param NegotiationsQueryInterview $query
+     *
+     * @return array
+     *
+     * @throws
+     */
+    public function sendInviteOnInterview(int $responseId, NegotiationsQueryInterview $query)
+    {
+        $url = 'https://' . Api::HOST_API . self::QUERY_INTERVIEW . '/' . $responseId;
+
+        $queryString = Utils::convertClassToUriQuery($query);
+
+        $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
+        $response = $this->api->request($url, $headers, 'PUT', $queryString);
+
+        $body = $response->getBody()->getContents();
+
+        $data = json_decode($body, true);
+
+        if (!is_array($data) || empty($data)) {
+            throw new \Exception('Error response searching vacancies');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Getting template message invite after response
+     *
+     * @param int $responseId
+     *
+     * @return string
+     *
+     * @throws
+     */
+    public function getTemplateInviteMessageAfterResponse(int $responseId): string
+    {
+        $url = 'https://' . Api::HOST_API . self::QUERY_INVITE_AFTER_RESPONSE . '/' . $responseId;
+
+       $response = $this->api->request($url);
+
+        $body = $response->getBody()->getContents();
+
+        $data = json_decode($body, true);
+
+        if (!is_array($data) || empty($data['mail']) || empty($data['mail']['text'])) {
+            throw new \Exception('Error getting template invite message after response');
+        }
+
+        return $data['mail']['text'];
     }
 }

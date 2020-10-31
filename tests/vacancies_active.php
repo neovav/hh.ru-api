@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Dataan\Settings;
-
 $api = require_once __DIR__ . '/api.php';
 
 try {

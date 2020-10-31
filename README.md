@@ -42,5 +42,5 @@ Using in your projects:
 1. Install package using composer:
 
 ```bash
-composer require neovav/hh.ru-api:1.0.3
+composer require neovav/hh.ru-api:1.0.4
 ```
