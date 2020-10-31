@@ -36,6 +36,12 @@ docker build -t hh.ru-api .
     ```bash
     docker run --env-file tests/.env hh.ru-api php -f tests/vacancies_active.php
     ```
+
+    e. For testing negotiation: 
+    
+    ```bash
+    docker run --env-file tests/.env hh.ru-api php -f tests/vacancies_active.php
+    ```
    
 Using in your projects:
 
