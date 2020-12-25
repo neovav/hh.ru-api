@@ -35,10 +35,10 @@ class Utils
             if (!empty($value)) {
                 if (is_array($value)) {
                     foreach ($value as $val) {
-                        $queries[] = $name . '='.urlencode($val);
+                        $queries[] = $name . '=' . urlencode($val);
                     }
                 } else {
-                    $queries[] = $name . '='.urlencode($value);
+                    $queries[] = $name . '=' . urlencode($value);
                 }
             }
         }
