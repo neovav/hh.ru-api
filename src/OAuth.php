@@ -16,6 +16,8 @@ class OAuth implements OAuthInterface
 
     const URL_GET_TOKEN = 'https://hh.ru/oauth/token';
 
+    private string $responseContent = '';
+
     /**
      * Constructor of the OAuth class
      *
@@ -114,11 +116,13 @@ class OAuth implements OAuthInterface
         try {
             $result = $this->requestToken($post);
         } catch (\Exception $e) {
-            throw new \Exception('Error request update access token (' . $e->getCode() . '): ' . $e->getMessage());
+            throw new \Exception('Error request update access token (' .
+                $e->getCode() . '): ' . $e->getMessage() . "\r\n" . $this->getResponseContent());
         }
 
         if (empty($result['access_token'])) {
-            throw new \Exception('Error request update access token. Access token is absent');
+            throw new \Exception('Error request update access token. Access token is absent. Response: ' .
+                "\r\n" . $this->getResponseContent());
         }
 
         return $result;
@@ -142,13 +146,13 @@ class OAuth implements OAuthInterface
 
         $result = $this->client->post(self::URL_GET_TOKEN, $options);
 
-        $content = $result->getBody()->getContents();
+        $this->requestContent = $result->getBody()->getContents();
 
-        if (empty($content)) {
+        if (empty($this->requestContent)) {
             throw new \Exception('Error getting access token');
         }
 
-        $data = json_decode($content, true);
+        $data = json_decode($this->requestContent, true);
 
         if (!is_array($data)) {
             throw new \Exception('Error decode json for access token');
@@ -211,5 +215,15 @@ class OAuth implements OAuthInterface
         }
 
         return $this->credentials->accessToken;
+    }
+
+    /**
+     * Get request content body
+     *
+     * @return string
+     */
+    public function getResponseContent(): string
+    {
+        return $this->responseContent;
     }
 }
