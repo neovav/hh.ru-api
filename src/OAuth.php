@@ -85,11 +85,13 @@ class OAuth implements OAuthInterface
         try {
             $result = $this->requestToken($post);
         } catch (\Exception $e) {
-            throw new \Exception('Error request get access token (' . $e->getCode() . '): ' . $e->getMessage());
+            throw new \Exception('Error request get access token (' . $e->getCode() . '): ' . $e->getMessage() .
+                "\r\n" . $this->getResponseContent());
         }
 
-        if (empty($data['access_token'])) {
-            throw new \Exception('Error request get access toke. Access token is absent');
+        if (empty($result['access_token'])) {
+            throw new \Exception('Error request get access toke. Access token is absent' .
+                "\r\n" . $this->getResponseContent());
         }
 
         return $result;
