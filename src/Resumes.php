@@ -8,6 +8,8 @@ class Resumes
 {
     const QUERY_SEARCH = '/resumes';
 
+    const QUERY_MY_RESUMES = '/resumes/mine';
+
     const QUERY_SAVED_SEARCH = '/saved_searches/resumes';
 
     private Api $api;
@@ -49,7 +51,7 @@ class Resumes
         $data = json_decode($body, true);
 
         if (!is_array($data) || empty($data)) {
-            throw new \Exception('Error response searching vacancies');
+            throw new \Exception('Error response searching resumes');
         }
 
         return $data;
@@ -95,10 +97,7 @@ class Resumes
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_SAVED_SEARCH . "/$id";
 
-        $headers = [];
-        $response = $this->api->request($url, $headers, 'DELETE');
-
-        $requestCode = $response->getStatusCode();
+        $requestCode = $this->api->request($url, [], 'DELETE')->getStatusCode();
 
         if ($requestCode !== 204) {
             throw new \Exception('Error request.');
@@ -121,10 +120,7 @@ class Resumes
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_SAVED_SEARCH . "/$id/managers/$managerId";
 
-        $headers = [];
-        $response = $this->api->request($url, $headers, 'PUT');
-
-        $requestCode = $response->getStatusCode();
+        $requestCode = $this->api->request($url, [], 'PUT')->getStatusCode();
 
         if ($requestCode !== 204) {
             throw new \Exception('Error request.');
@@ -147,15 +143,12 @@ class Resumes
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_SAVED_SEARCH . "?page=$page&per_page=$perPage";
 
-        $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
-        $response = $this->api->request($url, $headers);
-
-        $body = $response->getBody()->getContents();
+        $body = $this->api->request($url)->getBody()->getContents();
 
         $data = json_decode($body, true);
 
         if (!is_array($data) || empty($data)) {
-            throw new \Exception('Error response searching vacancies');
+            throw new \Exception('Error response saved search resumes');
         }
 
         return $data;
@@ -174,15 +167,82 @@ class Resumes
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_SAVED_SEARCH . "/$id";
 
-        $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
-        $response = $this->api->request($url, $headers);
-
-        $body = $response->getBody()->getContents();
+        $body = $this->api->request($url)->getBody()->getContents();
 
         $data = json_decode($body, true);
 
         if (!is_array($data) || empty($data)) {
-            throw new \Exception('Error response searching vacancies');
+            throw new \Exception('Error response saved search resumes by id');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get list my resumes
+     *
+     * @return array
+     *
+     * @throws
+     */
+    public function getListMyResumes():array
+    {
+        $url = 'https://' . Api::HOST_API . self::QUERY_MY_RESUMES;
+
+        $body = $this->api->request($url)->getBody()->getContents();
+
+        $data = json_decode($body, true);
+
+        if (!is_array($data) || empty($data)) {
+            throw new \Exception('Error response searching my resumes');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get resume by id
+     *
+     * @param int $id
+     *
+     * @return array
+     *
+     * @throws
+     */
+    public function getById(int $id):array
+    {
+        $url = 'https://' . Api::HOST_API . self::QUERY_MY_RESUMES . "/$id";
+
+        $body = $this->api->request($url)->getBody()->getContents();
+
+        $data = json_decode($body, true);
+
+        if (!is_array($data) || empty($data)) {
+            throw new \Exception('Error getting resume');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get resume by id
+     *
+     * @param int $id
+     *
+     * @return string
+     *
+     * @throws
+     */
+    public function create(): string
+    {
+        $url = 'https://' . Api::HOST_API . self::QUERY_SEARCH;
+
+        $body = $this->api->request($url)->getBody()->getContents();
+
+        $data = json_decode($body, true);
+
+        if (!is_array($data) || empty($data)) {
+            throw new \Exception('Error getting resume');
         }
 
         return $data;

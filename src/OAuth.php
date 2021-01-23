@@ -117,7 +117,7 @@ class OAuth implements OAuthInterface
             throw new \Exception('Error request update access token (' . $e->getCode() . '): ' . $e->getMessage());
         }
 
-        if (empty($data['access_token'])) {
+        if (empty($result['access_token'])) {
             throw new \Exception('Error request update access token. Access token is absent');
         }
 
