@@ -18,6 +18,8 @@ class OAuth implements OAuthInterface
 
     private string $responseContent = '';
 
+    private static $listFunctionsRequestToken = [];
+
     /**
      * Constructor of the OAuth class
      *
@@ -28,6 +30,16 @@ class OAuth implements OAuthInterface
     {
         $this->credentials = &$credentials;
         $this->client = ($client instanceof Client) ? $client : new Client();
+    }
+
+    /**
+     * Adding a function for processing a request to get a token
+     *
+     * @param callable $functionRequestToken
+     */
+    public static function addFunctionsRequestToken(callable $functionRequestToken)
+    {
+        self::$listFunctionsRequestToken[] = $functionRequestToken;
     }
 
     /**
@@ -178,6 +190,12 @@ class OAuth implements OAuthInterface
             throw new \Exception($data['error_description']);
         }
 
+        if (!empty(self::$listFunctionsRequestToken)) {
+            foreach (self::$listFunctionsRequestToken as $func) {
+                $func($data);
+            }
+        }
+
         return $data;
     }
 
@@ -209,13 +227,10 @@ class OAuth implements OAuthInterface
             }
 
             $this->getAccessToken();
-        } else {
-            if (empty($expairesIn)
-                || time() > $expairesIn
-                || empty($this->credentials->accessToken)
-            ) {
-                $this->updAccessToken();
-            }
+        } elseif (empty($expairesIn)
+            || time() > $expairesIn
+            || empty($this->credentials->accessToken)) {
+            $this->updAccessToken();
         }
 
         return $this->credentials->accessToken;
