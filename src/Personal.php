@@ -75,4 +75,32 @@ class Personal
 
         return $result;
     }
+
+    /**
+     * Get employer address
+     *https://github.com/hhru/api/blob/master/docs/employer_addresses.md
+     *
+     * @param int $employerId
+     *
+     * @return array
+     *
+     * @throws
+     */
+    public function getAddress(int $employerId): array
+    {
+        $url = 'https://' . Api::HOST_API . "/employers/$employerId/addresses";
+
+        $response = $this->api->request($url);
+
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+
+        $data = json_decode($body, true);
+
+        if (!is_array($data) || empty($data)) {
+            throw new \Exception('Error response personal data');
+        }
+
+        return $data;
+    }
 }
