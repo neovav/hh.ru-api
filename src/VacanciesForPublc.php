@@ -19,7 +19,7 @@ class VacanciesForPublc
     /** string type.id */
     public ?array $type = null;
     /** string billing_type.id */
-    public ?array $billing_type = null;
+    public ?array $billing_type = ['id' => 'standard'];
     /** string site.id */
     public ?array $site = null;
     public string $code = '';

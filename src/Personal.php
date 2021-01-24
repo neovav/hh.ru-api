@@ -98,7 +98,7 @@ class Personal
         $data = json_decode($body, true);
 
         if (!is_array($data) || empty($data)) {
-            throw new \Exception('Error response personal data');
+            throw new \Exception('Error response get address');
         }
 
         return $data;

@@ -122,4 +122,31 @@ class Vacancies
 
         return $data['id'];
     }
+
+    /**
+     * Get list brands templates
+     *
+     * @param int $employerId
+     *
+     * @return array
+     *
+     * @throws
+     */
+    public function getListBrandsTemplates(int $employerId): array
+    {
+        $url = 'https://' . Api::HOST_API . "/employers/$employerId/vacancy_branded_templates";
+
+        $response = $this->api->request($url);
+
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+
+        $data = json_decode($body, true);
+
+        if (!is_array($data) || empty($data)) {
+            throw new \Exception('Error response list templates fo brand');
+        }
+
+        return $data;
+    }
 }
