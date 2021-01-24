@@ -46,6 +46,7 @@ class Vacancies
         $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
         $response = $this->api->request($url, $headers);
 
+        $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
@@ -80,6 +81,7 @@ class Vacancies
         $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
         $response = $this->api->request($url, $headers);
 
+        $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
@@ -109,6 +111,7 @@ class Vacancies
         $headers = ['Content-type' => 'application/json'];
         $response = $this->api->requestPost($url, $body, $headers);
 
+        $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);

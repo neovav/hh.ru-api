@@ -48,6 +48,7 @@ class Negotiations
         $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
         $response = $this->api->request($url, $headers);
 
+        $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
@@ -78,6 +79,7 @@ class Negotiations
         $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
         $response = $this->api->request($url, $headers, 'PUT', $queryString);
 
+        $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
@@ -104,6 +106,7 @@ class Negotiations
 
        $response = $this->api->request($url);
 
+        $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);

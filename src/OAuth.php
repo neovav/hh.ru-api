@@ -162,6 +162,7 @@ class OAuth implements OAuthInterface
 
         $result = $this->client->post(self::URL_GET_TOKEN, $options);
 
+        $result->getBody()->rewind();
         $this->requestContent = $result->getBody()->getContents();
 
         if (empty($this->requestContent)) {

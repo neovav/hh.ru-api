@@ -46,6 +46,7 @@ class Resumes
         $headers = ['Content-type' => 'application/x-www-form-urlencoded'];
         $response = $this->api->request($url, $headers);
 
+        $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
@@ -143,7 +144,9 @@ class Resumes
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_SAVED_SEARCH . "?page=$page&per_page=$perPage";
 
-        $body = $this->api->request($url)->getBody()->getContents();
+        $response = $this->api->request($url);
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
 
@@ -167,7 +170,9 @@ class Resumes
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_SAVED_SEARCH . "/$id";
 
-        $body = $this->api->request($url)->getBody()->getContents();
+        $response = $this->api->request($url);
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
 
@@ -189,7 +194,9 @@ class Resumes
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_MY_RESUMES;
 
-        $body = $this->api->request($url)->getBody()->getContents();
+        $response = $this->api->request($url);
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
 
@@ -213,7 +220,9 @@ class Resumes
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_MY_RESUMES . "/$id";
 
-        $body = $this->api->request($url)->getBody()->getContents();
+        $response = $this->api->request($url);
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
 
@@ -237,7 +246,9 @@ class Resumes
     {
         $url = 'https://' . Api::HOST_API . self::QUERY_SEARCH;
 
-        $body = $this->api->request($url)->getBody()->getContents();
+        $response = $this->api->request($url);
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
 

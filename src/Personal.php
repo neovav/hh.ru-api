@@ -33,6 +33,7 @@ class Personal
 
         $response = $this->api->request($url);
 
+        $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $data = json_decode($body, true);
@@ -63,6 +64,7 @@ class Personal
 
         $response = $this->api->requestPost($url, $data, $headers);
 
+        $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $result = json_decode($body, true);
