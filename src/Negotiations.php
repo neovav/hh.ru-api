@@ -11,8 +11,8 @@ class Negotiations
     private Api $api;
 
     const QUERY_LIST = '/negotiations/response';
-
-    const QUERY_INTERVIEW = '/negotiations/invited.';
+    
+    const QUERY_INTERVIEW = '/negotiations/interview/';
 
     const QUERY_INVITE_AFTER_RESPONSE = '/message_templates/invite_after_response';
 
@@ -72,7 +72,7 @@ class Negotiations
      */
     public function sendInviteOnInterview(int $responseId, NegotiationsQueryInterview $query)
     {
-        $url = 'https://' . Api::HOST_API . self::QUERY_INTERVIEW . '/' . $responseId;
+        $url = 'https://' . Api::HOST_API . self::QUERY_INTERVIEW . $responseId;
 
         $queryString = Utils::convertClassToUriQuery($query);
 
@@ -94,17 +94,18 @@ class Negotiations
     /**
      * Getting template message invite after response
      *
-     * @param int $responseId
+     * @param $resumeId
+     * @param $vacancyId
      *
      * @return string
      *
      * @throws
      */
-    public function getTemplateInviteMessageAfterResponse(int $responseId): string
+    public function getTemplateInviteMessageAfterResponse($resumeId, $vacancyId): string
     {
-        $url = 'https://' . Api::HOST_API . self::QUERY_INVITE_AFTER_RESPONSE . '/' . $responseId;
+        $url = 'https://' . Api::HOST_API . self::QUERY_INVITE_AFTER_RESPONSE . "?resume_id=$resumeId&vacancy_id=$vacancyId";
 
-       $response = $this->api->request($url);
+        $response = $this->api->request($url);
 
         $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
