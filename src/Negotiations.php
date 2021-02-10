@@ -11,7 +11,7 @@ class Negotiations
     private Api $api;
 
     const QUERY_LIST = '/negotiations/response';
-    
+
     const QUERY_INTERVIEW = '/negotiations/interview/';
 
     const QUERY_INVITE_AFTER_RESPONSE = '/message_templates/invite_after_response';

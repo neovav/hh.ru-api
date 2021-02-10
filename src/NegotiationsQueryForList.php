@@ -7,7 +7,7 @@ namespace HHruApi;
 class NegotiationsQueryForList
 {
     public int $page = 0;
-    public int $per_page = 100;
+    public int $per_page = 50;
     public string $order_by = '';
     public string $order = 'asc';
     public ?int $vacancy_id = null;
