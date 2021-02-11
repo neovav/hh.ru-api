@@ -66,8 +66,6 @@ class Negotiations
      * @param int $responseId
      * @param NegotiationsQueryInterview $query
      *
-     * @return array
-     *
      * @throws
      */
     public function sendInviteOnInterview(int $responseId, NegotiationsQueryInterview $query)
@@ -80,15 +78,11 @@ class Negotiations
         $response = $this->api->request($url, $headers, 'PUT', $queryString);
 
         $response->getBody()->rewind();
-        $body = $response->getBody()->getContents();
+        $statusCode = $response->getStatusCode();
 
-        $data = json_decode($body, true);
-
-        if (!is_array($data) || empty($data)) {
-            throw new \Exception('Error response searching vacancies');
+        if ($statusCode !== 204) {
+            throw new \Exception('Error send invite');
         }
-
-        return $data;
     }
 
     /**
